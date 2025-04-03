@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+  postput_api:
+    image: postput/api:latest
+    restart: always
+    depends_on:
+     - postput_db
+    environment:
+      SEQUELIZE_FORCE_SYNC: "true"
+    command: ["npm", "start"]
+    ports:
+      - '2000:3000'
+  postput_admin_backend:
+    image: postput/admin-backend:latest
+    restart: always
+    depends_on:
+     - postput_db
+    environment:
+      SEQUELIZE_FORCE_SYNC: "true"
+    command: ["npm", "start"]
+    ports:
+      - '2001:3000'
+  postput_admin_frontend:
+    environment:
+      CONFIGURATION: production
+    image: postput/admin-frontend:dev
+    restart: always
+    ports:
+      - '2002:4200'
+volumes:
+  db_data_postput: {}
